@@ -1,30 +1,31 @@
-def start():
-    x_durum =[]
-    o_durum = []
+winning_criteria = [[[0, 0], [1, 0], [2, 0]],
+                    [[0, 1], [1, 1], [2, 1]],
+                    [[0, 2], [1, 2], [2, 2]],
+                    [[0, 0], [0, 1], [0, 2]],
+                    [[1, 0], [1, 1], [1, 2]],
+                    [[2, 0], [2, 1], [2, 2]],
+                    [[0, 0], [1, 1], [2, 2]],
+                    [[0, 2], [1, 1], [2, 0]]]
 
-    tahta = [["___", "___", "___"],
+def start(player1_symbol, player2_symbol):
+
+    player1_durum = []
+    player2_durum = []
+
+    board = [["___", "___", "___"],
              ["___", "___", "___"],
              ["___", "___", "___"]]
-    print("\n" * 5)
-    kazanma_ölçütleri = [[[0, 0], [1, 0], [2, 0]],
-                         [[0, 1], [1, 1], [2, 1]],
-                         [[0, 2], [1, 2], [2, 2]],
-                         [[0, 0], [0, 1], [0, 2]],
-                         [[1, 0], [1, 1], [1, 2]],
-                         [[2, 0], [2, 1], [2, 2]],
-                         [[0, 0], [1, 1], [2, 2]],
-                         [[0, 2], [1, 1], [2, 0]]]
-    #print(tahta)
 
-    show_board(tahta)
+    print("\n" * 5)
+
+    show_board(board)
 
     sira=1
     while True:
-        print("X durumu:",x_durum,"\n Y durumu: ", o_durum,"\n")
         if sira % 2 == 0:
-            isaret = "X".center(3)
+            isaret = player1_symbol.center(3)
         else:
-            isaret = "O".center(3)
+            isaret = player2_symbol.center(3)
 
         print("İŞARET: {}\n".format(isaret))
 
@@ -35,39 +36,41 @@ def start():
         if y == "q":
             break
 
-
         x=int(x)-1
         y=int(y)-1
 
-
-        if tahta[x][y]=="___":
-            tahta[x][y]=isaret
-            if isaret=="X".center(3):
-                x_durum+=[[x,y]]
-            elif isaret == "O".center(3):
-                o_durum += [[x, y]]
+        if board[x][y]=="___":
+            board[x][y]=isaret
+            if isaret==player1_symbol.center(3):
+                player1_durum+=[[x,y]]
+            elif isaret == player2_symbol.center(3):
+                player2_durum += [[x, y]]
             sira+=1
         else:
-            print(f"{0},{1} konumu dolu",x,y)
+            print(f"{x+1},{y+1} konumu dolu")
 
-        show_board(tahta)
+        show_board(board)
 
 
-        for i in kazanma_ölçütleri:
-            o = [z for z in i if z in o_durum]
-            x = [z for z in i if z in x_durum]
+        for i in winning_criteria:
+            o = [z for z in i if z in player2_durum]
+            x = [z for z in i if z in player1_durum]
             if len(o) == len(i):
-                print("O KAZANDI!")
+                print(f"{player2_symbol} KAZANDI!")
                 quit()
             if len(x) == len(i):
-                print("X KAZANDI!")
+                print(f"{player1_symbol} KAZANDI!")
                 quit()
 
-        print(f"\n son durumlar\n x durumu {x_durum} \n o durumu: {o_durum}")
+        print(f"Son durumlar\n {player1_symbol} durumu: {player1_durum} \n {player2_symbol} durumu: {player2_durum}")
 
 def show_board(board_item):
     for i in board_item:
         print("\t".expandtabs(30), *i, end="\n" * 2)
 
 
-start()
+
+player1=input("ilk oyuncu hangi simgeyi istiyor:")
+player2=input("İkinci oyuncu hangi simgeyi istiyor:")
+
+start(player1,player2)
