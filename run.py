@@ -79,7 +79,6 @@ def start(player1_symbol, player2_symbol):
         print(f"Son durumlar\n {player1_symbol} durumu: {player1_durum} \n {player2_symbol} durumu: {player2_durum}")
 
 
-
     print("Taşlar Bitti")
     #taşları oynatma blogu
     while True:
@@ -90,8 +89,6 @@ def start(player1_symbol, player2_symbol):
             isaret = player1_symbol.center(3)
         else:
             isaret = player2_symbol.center(3)
-
-
 
         print("İŞARET: {}\n Oynatmak istediğiniz taşın konumu giriniz".format(isaret))
         x_now = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
@@ -104,9 +101,7 @@ def start(player1_symbol, player2_symbol):
         y_now = int(y_now) - 1
 
 
-
-
-        while board[x_now-1][y_now-1] != isaret:
+        while board[x_now][y_now] != isaret:
             if board[x_now][y_now] != isaret:
                 print("Kendi taşınızı seçiniz!!")
 
@@ -121,25 +116,46 @@ def start(player1_symbol, player2_symbol):
                 break
             y_now=int(y_now)-1
 
-
-
-
-
         print("İŞARET: {}\n Nereye?".format(isaret))
-
-
 
         x_next = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
         if x_next == "q":
             break
-        x_next=int(x_next)
+        x_next=int(x_next)-1
         y_next = input("Soldan sağa [1, 2, 3]: ".ljust(30))
         if y_next == "q":
             break
-        y_next=int(y_next)
+        y_next=int(y_next)-1
 
+        #tahtadaki yeri boş ise
+        if board[x_next][y_next]=="___":
+            #yerine yerleştiriyoruz
+            board[x_next][y_next]=isaret
+            #tahtadaki eski yeri siliyoruz
+            board[x_now][y_now]="___"
+            #kim oynamış ise onun durumuna ekliyoruz
+            if isaret==player1_symbol.center(3):
+                player1_durum+=[[x_next,y_next]]
+                player1_durum.remove([x_now,y_now])
+            elif isaret == player2_symbol.center(3):
+                player2_durum += [[x_next, y_next]]
+                player2_durum.remove([x_now,y_now])
+            sira+=1
+            #print(f"Son durumlar\n {player1_symbol} durumu: {player1_durum} \n {player2_symbol} durumu: {player2_durum}")
+        else:
+            print(f"{x_next+1},{y_next+1} konumu dolu")
 
+        for i in winning_criteria:
+            x = [z for z in i if z in player1_durum]
+            o = [z for z in i if z in player2_durum]
+            if len(o) == len(i):
+                print(f"{player2_symbol} KAZANDI!")
+                quit()
+            if len(x) == len(i):
+                print(f"{player1_symbol} KAZANDI!")
+                quit()
 
+        print(f"Son durumlar\n {player1_symbol} durumu: {player1_durum} \n {player2_symbol} durumu: {player2_durum}")
 
 
 
