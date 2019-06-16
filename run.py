@@ -21,35 +21,36 @@ def start(player1_symbol, player2_symbol):
     #oyuncuların taşları
     player1_rocks = [player1_symbol,player1_symbol,player1_symbol]
     player2_rocks = [player2_symbol,player2_symbol,player2_symbol]
-
+    #oyunu oynayacağımız tahta
     board = [["___", "___", "___"],
              ["___", "___", "___"],
              ["___", "___", "___"]]
-
     print("\n" * 5)
 
     show_board(board)
 
     sira=1
     while player2_rocks or player1_rocks:
-        if sira % 2 == 0:
+        """if sira % 2 == 0:
             isaret = player1_symbol.center(3)
-
         else:
-            isaret = player2_symbol.center(3)
+            isaret = player2_symbol.center(3)"""
+
+        isaret = select_sign(sira, player1_symbol, player2_symbol)
 
 
-        print("İŞARET: {}\n".format(isaret))
 
-        x = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
+        """x = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
         if x == "q":
             break
         y = input("Soldan sağa [1, 2, 3]: ".ljust(30))
         if y == "q":
             break
-
         x=int(x)-1
-        y=int(y)-1
+        y=int(y)-1"""
+        x , y = enter_location()
+
+
 
         if board[x][y]=="___":
             board[x][y]=isaret
@@ -85,20 +86,19 @@ def start(player1_symbol, player2_symbol):
 
         show_board(board)
 
-        if sira % 2 == 0:
-            isaret = player1_symbol.center(3)
-        else:
-            isaret = player2_symbol.center(3)
+        isaret = select_sign(sira,player1_symbol,player2_symbol)
 
         print("İŞARET: {}\n Oynatmak istediğiniz taşın konumu giriniz".format(isaret))
-        x_now = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
+
+        x_now, y_now = enter_location()
+        """x_now = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
         if x == "q":
             break
         y_now = input("Soldan sağa [1, 2, 3]: ".ljust(30))
         if y == "q":
             break
         x_now = int(x_now) - 1
-        y_now = int(y_now) - 1
+        y_now = int(y_now) - 1"""
 
 
         while board[x_now][y_now] != isaret:
@@ -107,25 +107,30 @@ def start(player1_symbol, player2_symbol):
 
             print("İŞARET: {}\n Oynatmak istediğiniz taşın konumu giriniz".format(isaret))
 
-            x_now = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
+            x_now, y_now = enter_location()
+            """x_now = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
             if x == "q":
                 break
             x_now=int(x_now)-1
             y_now = input("Soldan sağa [1, 2, 3]: ".ljust(30))
             if y == "q":
                 break
-            y_now=int(y_now)-1
+            y_now=int(y_now)-1"""
+
+
 
         print("İŞARET: {}\n Nereye?".format(isaret))
 
-        x_next = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
+        x_next, y_next = enter_location()
+
+        """x_next = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
         if x_next == "q":
             break
         x_next=int(x_next)-1
         y_next = input("Soldan sağa [1, 2, 3]: ".ljust(30))
         if y_next == "q":
             break
-        y_next=int(y_next)-1
+        y_next=int(y_next)-1"""
 
         #tahtadaki yeri boş ise
         if board[x_next][y_next]=="___":
@@ -157,12 +162,29 @@ def start(player1_symbol, player2_symbol):
 
         print(f"Son durumlar\n {player1_symbol} durumu: {player1_durum} \n {player2_symbol} durumu: {player2_durum}")
 
-
+def select_sign(tour,player1_symbol,player2_symbol):
+    if tour % 2 == 0:
+        symbol = player1_symbol.center(3)
+    else:
+        symbol = player2_symbol.center(3)
+    print("İŞARET: {}\n".format(symbol))
+    return symbol
 
 #tahtanın son durumunu gösterme
 def show_board(board_item):
     for i in board_item:
         print("\t".expandtabs(30), *i, end="\n" * 2)
+
+def enter_location():
+    x = input("Yukarıdan aşağıya [1, 2, 3]: ".ljust(30))
+    if x == "q":
+        quit()
+    y = input("Soldan sağa [1, 2, 3]: ".ljust(30))
+    if y == "q":
+        quit()
+    return  int(x) - 1 , int(y) - 1
+
+
 
 
 player1=input("ilk oyuncu hangi simgeyi istiyor:")
@@ -170,5 +192,6 @@ player2=input("İkinci oyuncu hangi simgeyi istiyor:")
 
 while player1==player2:
     player2=input("Simgeler farklı olmalıdır. Player 2 yeniden giriniz:")
+
 
 start(player1,player2)
